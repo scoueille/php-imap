@@ -8,6 +8,7 @@ class IncomingMail extends IncomingMailHeader {
 
 	public $textPlain;
 	public $textHtml;
+	public $textRtf;
 	/** @var IncomingMailAttachment[] */
 	protected $attachments = array();
 

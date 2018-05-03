@@ -699,8 +699,9 @@ class Mailbox {
 			if($partStructure->type == 0 && $data) {
 				if(strtolower($partStructure->subtype) == 'plain') {
 					$mail->textPlain .= $data;
-				}
-				else {
+				} elseif(strtolower($partStructure->subtype) == 'rtf') {
+					$mail->textRtf .= $data;
+				} else {
 					$mail->textHtml .= $data;
 				}
 			}
