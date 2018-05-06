@@ -640,7 +640,7 @@ class Mailbox {
 		if(!empty($partStructure->dparameters)) {
 			foreach($partStructure->dparameters as $param) {
 				$paramName = strtolower(preg_match('~^(.*?)\*~', $param->attribute, $matches) ? $matches[1] : $param->attribute);
-				if(isset($params[$paramName])) {
+				if(isset($params[$paramName]) && $paramName != 'filename' && $paramName != 'name') {
 					$params[$paramName] .= $param->value;
 				}
 				else {
