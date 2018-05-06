@@ -29,6 +29,15 @@ class IncomingMail extends IncomingMailHeader {
 	}
 
 	/**
+	 * Delete files related to the attachments
+	 */
+	public function deleteAttachmentsFiles() {
+		foreach ($this->attachments as $id => $attachment) {
+			@unlink($attachment->filePath);
+		}
+	}
+
+	/**
 	 * Get array of internal HTML links placeholders
 	 * @return array attachmentId => link placeholder
 	 */
