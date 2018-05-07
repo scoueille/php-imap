@@ -153,13 +153,13 @@ class Mailbox {
 		foreach($this->timeouts as $type => $timeout) {
 			$this->imap('timeout', [$type, $timeout], false);
 		}
-		return $this->imap('open', [$this->imapPath, $this->imapLogin, $this->imapPassword, $this->imapOptions, $this->imapRetriesNum, $this->imapParams], false, ConnectionException::class);
+		return $this->imap('open', [$this->imapPath, $this->imapLogin, $this->imapPassword, $this->imapOptions, $this->imapRetriesNum, $this->imapParams], false, 2);
 	}
 
 	public function disconnect() {
 		$imapStream = $this->getImapStream(false);
 		if($imapStream && is_resource($imapStream)) {
-			$this->imap('close', [$imapStream, $this->expungeOnDisconnect ? CL_EXPUNGE : 0], false, null);
+			$this->imap('close', [$imapStream, $this->expungeOnDisconnect ? CL_EXPUNGE : 0], false, 0);
 		}
 	}
 
@@ -854,11 +854,11 @@ class Mailbox {
 	 * @param $methodShortName
 	 * @param array|string $args
 	 * @param bool $prependConnectionAsFirstArg
-	 * @param string|null $throwExceptionClass
+	 * @param int $throwExceptionClass
 	 * @return mixed
 	 * @throws Exception
 	 */
-	public function imap($methodShortName, $args = [], $prependConnectionAsFirstArg = true, $throwExceptionClass = Exception::class) {
+	public function imap($methodShortName, $args = [], $prependConnectionAsFirstArg = true, $throwExceptionClass = 1) {
 		if(!is_array($args)) {
 			$args = [$args];
 		}
@@ -879,10 +879,11 @@ class Mailbox {
 		if(!$result) {
 			$errors = imap_errors();
 			if($errors) {
-				if($throwExceptionClass) {
-					throw new $throwExceptionClass("IMAP method imap_$methodShortName() failed with error: " . implode('. ', $errors));
-				}
-				else {
+				if($throwExceptionClass == 1) {
+					throw new Exception("IMAP method imap_$methodShortName() failed with error: " . implode('. ', $errors));
+				} elseif($throwExceptionClass == 2) {
+					throw new ConnectionException("IMAP method imap_$methodShortName() failed with error: " . implode('. ', $errors));
+				} else {
 					return false;
 				}
 			}
