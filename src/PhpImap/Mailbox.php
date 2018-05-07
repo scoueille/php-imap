@@ -567,6 +567,9 @@ class Mailbox {
 		if(isset($head->message_id)) {
 			$header->messageId = $head->message_id;
 		}
+		if(isset($head->reference)) {
+			$header->reference = $head->reference;
+		}
 
 		return $header;
 	}

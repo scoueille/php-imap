@@ -23,4 +23,5 @@ class IncomingMailHeader {
 	public $replyTo = array();
 
 	public $messageId;
+	public $reference;
 }
